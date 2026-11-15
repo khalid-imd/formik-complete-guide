@@ -1,5 +1,5 @@
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
 
 interface SwitchRendererProps {
   label: string;

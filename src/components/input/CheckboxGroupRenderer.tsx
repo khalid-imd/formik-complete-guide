@@ -17,6 +17,7 @@ interface CheckboxGroupRendererProps {
   colSpan?: number;
   rowSpan?: number;
   onChange?: (value: string[]) => void;
+  onBlur?: () => void;
 }
 
 export function CheckboxGroupRenderer({
@@ -30,6 +31,7 @@ export function CheckboxGroupRenderer({
   colSpan = 1,
   rowSpan = 1,
   onChange,
+  onBlur,
 }: CheckboxGroupRendererProps) {
   const handleChange = (checked: boolean, optionValue: string) => {
     const newValue = checked
@@ -60,9 +62,10 @@ export function CheckboxGroupRenderer({
               name={name}
               checked={value.includes(option.value)}
               disabled={disabled}
-              onCheckedChange={(checked) =>
-                handleChange(checked === true, option.value)
-              }
+              onCheckedChange={(checked) => {
+                handleChange(checked === true, option.value);
+                onBlur?.();
+              }}
             />
 
             <Label htmlFor={`${name}-${option.value}`}>{option.label}</Label>

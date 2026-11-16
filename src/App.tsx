@@ -65,14 +65,16 @@ function App() {
                   placeholder="Enter first name"
                   required
                   colSpan={2}
-                  onChange={formik.handleChange}
                   value={formik.values.firstName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
                 <InputRenderer
                   label="Last Name"
                   name="lastName"
                   value={formik.values.lastName}
                   onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   type="text"
                   placeholder="Enter last name"
                   required
@@ -84,6 +86,7 @@ function App() {
                   type="email"
                   value={formik.values.email}
                   onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   placeholder="Enter email address"
                   required
                   colSpan={4}
@@ -94,6 +97,7 @@ function App() {
                   type="number"
                   value={formik.values.phone}
                   onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   placeholder="Enter your phone number"
                   required
                   colSpan={4}
@@ -103,6 +107,7 @@ function App() {
                   name="birthDate"
                   value={formik.values.birthDate}
                   onChange={(date) => formik.setFieldValue("birthDate", date)}
+                  onBlur={() => formik.setFieldTouched("birthDate", true)}
                   required
                   colSpan={4}
                 />
@@ -112,6 +117,7 @@ function App() {
                   options={genderOptions}
                   value={formik.values.gender}
                   onChange={(value) => formik.setFieldValue("gender", value)}
+                  onBlur={() => formik.setFieldTouched("gender", true)}
                   colSpan={2}
                   required
                 />
@@ -147,6 +153,7 @@ function App() {
                 placeholder="Select department"
                 value={formik.values.department}
                 onChange={(value) => formik.setFieldValue("department", value)}
+                onBlur={() => formik.setFieldTouched("department", true)}
                 colSpan={4}
                 required
               />
@@ -157,6 +164,7 @@ function App() {
                 options={skillsOptions}
                 value={formik.values.skills}
                 onChange={(value) => formik.setFieldValue("skills", value)}
+                onBlur={() => formik.setFieldTouched("skills", true)}
                 colSpan={4}
               />
 
@@ -166,6 +174,7 @@ function App() {
                 description="Enable or disable employee status."
                 value={formik.values.isActive}
                 onChange={(value) => formik.setFieldValue("isActive", value)}
+                onBlur={() => formik.setFieldTouched("isActive", true)}
                 colSpan={2}
               />
 
@@ -177,6 +186,7 @@ function App() {
                 onChange={(value) =>
                   formik.setFieldValue("agreeToTerms", value)
                 }
+                onBlur={() => formik.setFieldTouched("agreeToTerms", true)}
                 colSpan={2}
               />
             </InputParent>

@@ -17,6 +17,7 @@ interface RadioRendererProps {
   colSpan?: number;
   rowSpan?: number;
   onChange?: (value: string) => void;
+  onBlur?: () => void;
 }
 
 export function RadioRenderer({
@@ -30,6 +31,7 @@ export function RadioRenderer({
   colSpan = 1,
   rowSpan = 1,
   onChange,
+  onBlur,
 }: RadioRendererProps) {
   return (
     <div
@@ -47,7 +49,10 @@ export function RadioRenderer({
       <RadioGroup
         name={name}
         value={value}
-        onValueChange={(value) => onChange?.(value)}
+        onValueChange={(value) => {
+          onChange?.(value);
+          onBlur?.();
+        }}
         disabled={disabled}
         className="flex flex-wrap gap-5"
       >

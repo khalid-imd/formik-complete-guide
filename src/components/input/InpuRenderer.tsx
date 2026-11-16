@@ -16,6 +16,7 @@ interface InputRendererProps {
   rowSpan?: number;
 
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 }
 
 export function InputRenderer({
@@ -31,6 +32,7 @@ export function InputRenderer({
   colSpan = 1,
   rowSpan = 1,
   onChange,
+  onBlur,
 }: InputRendererProps) {
   return (
     <div
@@ -55,6 +57,7 @@ export function InputRenderer({
         value={value}
         aria-invalid={!!error}
         onChange={onChange}
+        onBlur={onBlur}
       />
 
       {error && <p className="text-xs text-destructive">{error}</p>}

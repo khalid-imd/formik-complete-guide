@@ -3,7 +3,7 @@ import { InputRenderer } from "./components/input/InpuRenderer";
 import { InputParent } from "./components/input/InputParent";
 import ThemeToggle from "./components/ThemeToggle";
 
-import { useFormik } from "formik";
+import { useFormik, type FormikErrors } from "formik";
 import { initialValues } from "./constant/InitialValues";
 import { DatePickerRenderer } from "./components/input/DatePickerRenderer";
 import { RadioRenderer } from "./components/input/RadioRenderer";
@@ -18,6 +18,28 @@ function App() {
     initialValues: initialValues,
     enableReinitialize: true,
     validateOnChange: true,
+    validate: (values) => {
+      const errors: FormikErrors<typeof initialValues> = {};
+
+      if (!values.firstName) {
+        errors.firstName = "First name is required";
+      }
+
+      if (!values.lastName) {
+        errors.lastName = "Last name is required";
+      }
+
+      if (!values.email) {
+        errors.email = "Email is required";
+      } else if (
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+      ) {
+        errors.email = "Invalid email address";
+      }
+
+      return errors;
+    },
+
     onSubmit: (values) => {
       console.log(values);
     },
@@ -68,17 +90,25 @@ function App() {
                   value={formik.values.firstName}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.firstName
+                      ? formik.errors.firstName
+                      : undefined
+                  }
                 />
                 <InputRenderer
                   label="Last Name"
                   name="lastName"
-                  value={formik.values.lastName}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
                   type="text"
                   placeholder="Enter last name"
                   required
                   colSpan={2}
+                  value={formik.values.lastName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.lastName ? formik.errors.lastName : undefined
+                  }
                 />
                 <InputRenderer
                   label="Email Address"
@@ -87,6 +117,7 @@ function App() {
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  error={formik.touched.email ? formik.errors.email : undefined}
                   placeholder="Enter email address"
                   required
                   colSpan={4}
@@ -99,7 +130,6 @@ function App() {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   placeholder="Enter your phone number"
-                  required
                   colSpan={4}
                 />
                 <DatePickerRenderer
@@ -108,7 +138,6 @@ function App() {
                   value={formik.values.birthDate}
                   onChange={(date) => formik.setFieldValue("birthDate", date)}
                   onBlur={() => formik.setFieldTouched("birthDate", true)}
-                  required
                   colSpan={4}
                 />
                 <RadioRenderer
@@ -119,7 +148,6 @@ function App() {
                   onChange={(value) => formik.setFieldValue("gender", value)}
                   onBlur={() => formik.setFieldTouched("gender", true)}
                   colSpan={2}
-                  required
                 />
 
                 <TextareaRenderer
@@ -131,7 +159,6 @@ function App() {
                   onBlur={formik.handleBlur}
                   colSpan={4}
                   rows={3}
-                  required
                 />
               </InputParent>
             </form>
@@ -155,7 +182,6 @@ function App() {
                 onChange={(value) => formik.setFieldValue("department", value)}
                 onBlur={() => formik.setFieldTouched("department", true)}
                 colSpan={4}
-                required
               />
 
               <CheckboxGroupRenderer

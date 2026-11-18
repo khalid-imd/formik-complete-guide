@@ -18,6 +18,7 @@ function App() {
     initialValues: initialValues,
     enableReinitialize: true,
     validateOnChange: true,
+    validateOnMount: true,
     validate: (values) => {
       const errors: FormikErrors<typeof initialValues> = {};
 
@@ -39,9 +40,12 @@ function App() {
 
       return errors;
     },
+    onSubmit: async (values) => {
+      console.log("Submitting:", values);
 
-    onSubmit: (values) => {
-      console.log(values);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      console.log("Submit completed");
     },
   });
 
@@ -219,20 +223,23 @@ function App() {
           </section>
 
           <div className="flex justify-end gap-3">
-            <button
-              type="button"
-              onClick={() => formik.resetForm()}
-              className="rounded-lg border px-5 py-2 text-sm font-medium hover:bg-muted"
-            >
-              Reset
-            </button>
-
-            <button
-              type="submit"
-              className="rounded-lg bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
-            >
-              Submit
-            </button>
+            {formik.dirty && !formik.isSubmitting && (
+              <button
+                type="button"
+                onClick={() => formik.resetForm()}
+                className="rounded-lg border px-5 py-2 text-sm font-medium hover:bg-muted"
+              >
+                Reset
+              </button>
+            )}
+            {formik.dirty && formik.isValid && (
+              <button
+                type="submit"
+                className="rounded-lg bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+              >
+                {formik.isSubmitting ? "Sumbimting..." : "Submit"}
+              </button>
+            )}
           </div>
         </form>
       </div>

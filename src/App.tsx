@@ -17,26 +17,12 @@ function App() {
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
-    validateOnChange: true,
+    validateOnChange: false,
     validateOnMount: true,
-    validate: (values) => {
+    validate: async (values) => {
       const errors: FormikErrors<typeof initialValues> = {};
 
-      if (!values.firstName) {
-        errors.firstName = "First name is required";
-      }
-
-      if (!values.lastName) {
-        errors.lastName = "Last name is required";
-      }
-
-      if (!values.email) {
-        errors.email = "Email is required";
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-      ) {
-        errors.email = "Invalid email address";
-      }
+      await validatingUserName(values, errors);
 
       return errors;
     },
@@ -48,6 +34,37 @@ function App() {
       console.log("Submit completed");
     },
   });
+
+  const validatingUserName = async (
+    values: typeof initialValues,
+    errors: FormikErrors<typeof initialValues>,
+  ): Promise<FormikErrors<typeof initialValues>> => {
+    console.log("valid");
+
+    if (!values.user_name.trim()) {
+      errors.user_name = "Username is required";
+    } else {
+      // Simulasi asynchronous validation 3 detik
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      if (values.user_name.length < 5) {
+        errors.user_name = "Minimum 5 characters";
+      } else if (values.user_name.length > 15) {
+        errors.user_name = "Maximum 15 characters";
+      } else if (/\s/.test(values.user_name)) {
+        errors.user_name = "Username cannot contain spaces";
+      } else if (!/[a-zA-Z]/.test(values.user_name)) {
+        errors.user_name = "Must contain at least one letter";
+      } else if (!/[0-9]/.test(values.user_name)) {
+        errors.user_name = "Must contain at least one number";
+      } else if (!/[@_.-]/.test(values.user_name)) {
+        errors.user_name =
+          "Must contain at least one special character (@, _, ., -)";
+      }
+    }
+
+    return errors;
+  };
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -113,6 +130,26 @@ function App() {
                   error={
                     formik.touched.lastName ? formik.errors.lastName : undefined
                   }
+                />
+                <InputRenderer
+                  label="User Name"
+                  name="user_name"
+                  value={formik.isValidating ? "" : formik.values.user_name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.user_name
+                      ? formik.errors.user_name
+                      : undefined
+                  }
+                  placeholder={
+                    formik.isValidating
+                      ? "Checking username..."
+                      : "Enter user name"
+                  }
+                  required
+                  colSpan={4}
+                  disabled={formik.isValidating}
                 />
                 <InputRenderer
                   label="Email Address"

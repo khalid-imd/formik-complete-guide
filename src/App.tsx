@@ -3,7 +3,7 @@ import { InputRenderer } from "./components/input/InpuRenderer";
 import { InputParent } from "./components/input/InputParent";
 import ThemeToggle from "./components/ThemeToggle";
 
-import { useFormik, type FormikErrors } from "formik";
+import { useFormik } from "formik";
 import { initialValues } from "./constant/InitialValues";
 import { DatePickerRenderer } from "./components/input/DatePickerRenderer";
 import { RadioRenderer } from "./components/input/RadioRenderer";
@@ -12,59 +12,27 @@ import { SwitchRenderer } from "./components/input/SwitchRenderer";
 import { CheckboxGroupRenderer } from "./components/input/CheckboxGroupRenderer";
 import { CheckboxRenderer } from "./components/input/CheckboxRenderer";
 import { SelectRenderer } from "./components/input/SelectRenderer";
+import { employeeSchema } from "./schema/Employee.schema";
 
 function App() {
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
-    validateOnChange: false,
+    validateOnChange: true,
     validateOnMount: true,
-    validate: async (values) => {
-      const errors: FormikErrors<typeof initialValues> = {};
-
-      await validatingUserName(values, errors);
-
-      return errors;
-    },
+    validationSchema: employeeSchema,
     onSubmit: async (values) => {
       console.log("Submitting:", values);
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
+      // just in case: if there is error from api and you need to set error
+      //  formik.setFieldError("userName", "Username already registered");
+      //  formik.setFieldTouched("userName", true);
+
       console.log("Submit completed");
     },
   });
-
-  const validatingUserName = async (
-    values: typeof initialValues,
-    errors: FormikErrors<typeof initialValues>,
-  ): Promise<FormikErrors<typeof initialValues>> => {
-    console.log("valid");
-
-    if (!values.user_name.trim()) {
-      errors.user_name = "Username is required";
-    } else {
-      // Simulasi asynchronous validation 3 detik
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      if (values.user_name.length < 5) {
-        errors.user_name = "Minimum 5 characters";
-      } else if (values.user_name.length > 15) {
-        errors.user_name = "Maximum 15 characters";
-      } else if (/\s/.test(values.user_name)) {
-        errors.user_name = "Username cannot contain spaces";
-      } else if (!/[a-zA-Z]/.test(values.user_name)) {
-        errors.user_name = "Must contain at least one letter";
-      } else if (!/[0-9]/.test(values.user_name)) {
-        errors.user_name = "Must contain at least one number";
-      } else if (!/[@_.-]/.test(values.user_name)) {
-        errors.user_name =
-          "Must contain at least one special character (@, _, ., -)";
-      }
-    }
-
-    return errors;
-  };
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -133,23 +101,17 @@ function App() {
                 />
                 <InputRenderer
                   label="User Name"
-                  name="user_name"
-                  value={formik.isValidating ? "" : formik.values.user_name}
+                  name="userName"
+                  type="text"
+                  value={formik.values.userName}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched.user_name
-                      ? formik.errors.user_name
-                      : undefined
+                    formik.touched.userName ? formik.errors.userName : undefined
                   }
-                  placeholder={
-                    formik.isValidating
-                      ? "Checking username..."
-                      : "Enter user name"
-                  }
+                  placeholder={"Enter user name"}
                   required
                   colSpan={4}
-                  disabled={formik.isValidating}
                 />
                 <InputRenderer
                   label="Email Address"

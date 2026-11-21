@@ -1,7 +1,7 @@
 export interface EmployeeFormValues {
   firstName: string;
   lastName: string;
-  user_name: string;
+  userName: string;
   email: string;
   phone: string;
   gender: string;
@@ -16,7 +16,7 @@ export interface EmployeeFormValues {
 export const initialValues: EmployeeFormValues = {
   firstName: "",
   lastName: "",
-  user_name: "",
+  userName: "",
   email: "",
   phone: "",
   gender: "",

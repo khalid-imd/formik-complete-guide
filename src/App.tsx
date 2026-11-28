@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import "./App.css";
 
 import ThemeToggle from "./components/ThemeToggle";
+import { toast, Toaster } from "./components/ui/toast";
 import { initialValues } from "./constant/InitialValues";
 import { employeeSchema } from "./schema/Employee.schema";
 import { InputParent } from "./components/input/InputParent";
@@ -14,7 +15,6 @@ import { TextareaRenderer } from "./components/input/TextareaRenderer";
 import { CheckboxRenderer } from "./components/input/CheckboxRenderer";
 import { DatePickerRenderer } from "./components/input/DatePickerRenderer";
 import { CheckboxGroupRenderer } from "./components/input/CheckboxGroupRenderer";
-import { toast, Toaster } from "./components/ui/toast";
 
 function App() {
   const formik = useFormik({

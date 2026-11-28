@@ -48,6 +48,10 @@ function App() {
     },
   });
 
+  // useEffect(() => {
+  //   console.log(formik.status);
+  // }, [formik.status]);
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">

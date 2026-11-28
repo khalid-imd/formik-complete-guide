@@ -1,18 +1,19 @@
-import "./App.css";
-import { InputRenderer } from "./components/input/InpuRenderer";
-import { InputParent } from "./components/input/InputParent";
-import ThemeToggle from "./components/ThemeToggle";
-
 import { useFormik } from "formik";
+
+import "./App.css";
+
+import ThemeToggle from "./components/ThemeToggle";
 import { initialValues } from "./constant/InitialValues";
-import { DatePickerRenderer } from "./components/input/DatePickerRenderer";
-import { RadioRenderer } from "./components/input/RadioRenderer";
-import { TextareaRenderer } from "./components/input/TextareaRenderer";
-import { SwitchRenderer } from "./components/input/SwitchRenderer";
-import { CheckboxGroupRenderer } from "./components/input/CheckboxGroupRenderer";
-import { CheckboxRenderer } from "./components/input/CheckboxRenderer";
-import { SelectRenderer } from "./components/input/SelectRenderer";
 import { employeeSchema } from "./schema/Employee.schema";
+import { InputParent } from "./components/input/InputParent";
+import { InputRenderer } from "./components/input/InpuRenderer";
+import { RadioRenderer } from "./components/input/RadioRenderer";
+import { SwitchRenderer } from "./components/input/SwitchRenderer";
+import { SelectRenderer } from "./components/input/SelectRenderer";
+import { TextareaRenderer } from "./components/input/TextareaRenderer";
+import { CheckboxRenderer } from "./components/input/CheckboxRenderer";
+import { DatePickerRenderer } from "./components/input/DatePickerRenderer";
+import { CheckboxGroupRenderer } from "./components/input/CheckboxGroupRenderer";
 
 function App() {
   const formik = useFormik({
@@ -21,7 +22,7 @@ function App() {
     validateOnChange: true,
     validateOnMount: true,
     validationSchema: employeeSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setStatus }) => {
       console.log("Submitting:", values);
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -30,7 +31,20 @@ function App() {
       //  formik.setFieldError("userName", "Username already registered");
       //  formik.setFieldTouched("userName", true);
 
-      console.log("Submit completed");
+      try {
+        // API request simulation
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        setStatus({
+          success: true,
+          message: "Employee successfully saved!",
+        });
+      } catch (error) {
+        setStatus({
+          success: false,
+          message: error,
+        });
+      }
     },
   });
 
